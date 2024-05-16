@@ -1,43 +1,77 @@
-#include "pch.h"
+/**
+ * @file test.cpp
+ * @brief This file contains the unit tests for the program
+ * @author Xyang2113301
+ */
+#include"pch.h"
 #include <cstdio>
 #include<iostream>
 #include <fstream>
 #include <string>
+#include "def.h"
 
-std::fstream test_input;
-#define ins(d) test_input<<d<<std::endl;
+#define _CRT_SECURE_NO_WARNINGS
 
-#define insert_int(d) std::fprintf(temp_input, "%d\n",d);
-std::string FUNC[] = { "NOT", "AND", "OR", "XOR","NAND","NOR" };
-std::string IO[] = { "I","O" };
-
-TEST(stdTest, givenCase) {
-    freopen("stdTest.txt", "r", stdin);
-    run_wire();
+extern int record_ouputs[NUM_RUNTIME_MAX][NUM_ELEMENT_MAX];
+extern int if_loop;
+TEST(SampleTest, givenCase) {
+    freopen("./Test/Sample.txt", "r", stdin);
+    testing::internal::CaptureStdout();
+    Solve();
+    std::string output = testing::internal::GetCapturedStdout();
     freopen("CON", "r", stdin);
-    extern int record_ouputs[S_max][N_MAX];
-    EXPECT_EQ(record_ouputs[0][4], 1);
-    EXPECT_EQ(record_ouputs[0][1], 0);
-    EXPECT_EQ(record_ouputs[1][4], 1);
-    EXPECT_EQ(record_ouputs[1][1], 0);
-    EXPECT_EQ(record_ouputs[2][4], 1);
-    EXPECT_EQ(record_ouputs[2][1], 1);
-    EXPECT_EQ(record_ouputs[3][4], 0);
-    EXPECT_EQ(record_ouputs[3][1], 0);
-    printf("PASS stdTEST!!!\n");
+    EXPECT_EQ(output, "1 0 \n1 0 \n1 1 \n0 0 \n");
+}
+
+TEST(SimulateTest, test2) {
+    freopen("./Test/test1.txt", "r", stdin);
+    testing::internal::CaptureStdout();
+    Solve();
+    freopen("CON", "r", stdin);
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "0 \n1 \n1 \n0 \n1 \n0 \n0 \n1 \n");
+}
+
+TEST(SimulateTest, test3) {
+    freopen("./Test/test2.txt", "r", stdin);
+    testing::internal::CaptureStdout();
+    Solve();
+    freopen("CON", "r", stdin);
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "0 0 \n1 0 \n1 0 \n0 1 \n1 0 \n0 1 \n0 1 \n1 1 \n");
+}
+
+TEST(LoopTest, test1) {
+    freopen("./LoopTest/LoopTest1.txt", "r", stdin);
+    Solve();
+    freopen("CON", "r", stdin);
+    EXPECT_EQ(if_loop, 1);
+}
+
+TEST(LoopTest, test2) {
+    freopen("./LoopTest/LoopTest2.txt", "r", stdin);
+    Solve();
+    freopen("CON", "r", stdin);
+    EXPECT_EQ(if_loop, 1);
+    
+}
+
+TEST(LoopTest, test3) {
+    freopen("./LoopTest/LoopTest3.txt", "r", stdin);
+    Solve();
+    freopen("CON", "r", stdin);
+    EXPECT_EQ(if_loop, 1);
 
 }
 
-TEST(testLoop, test1) {
-    freopen("loopTest1.txt", "r", stdin);
-    run_wire();
+TEST(LoopTest, test4) {
+    freopen("./LoopTest/LoopTest4.txt", "r", stdin);
+    Solve();
     freopen("CON", "r", stdin);
-    extern int record_ouputs[S_max][N_MAX];
-    extern int ifLoop;
-    EXPECT_EQ(ifLoop, 1);
-    printf("PASS LoopTEST!!!\n");
-}
+    //extern int record_ouputs[NUM_RUNTIME_MAX][NUM_ELEMENT_MAX];
+    EXPECT_EQ(if_loop, 1);
 
+}
 
 
 
