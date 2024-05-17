@@ -5,7 +5,6 @@
 #ifndef LOGIC_GATE_H_
 #define LOGIC_GATE_H_
 
-
 #include <stdio.h>
 #include <stdarg.h>
 #include "def.h"
@@ -37,12 +36,10 @@ int LogicGate(int func, intptr_t* inputs) {
   int operand1 = *(int*)inputs[1];
 
   int result = operand1;
-  if(operand1 == -1)  return -1;  //表示依赖后续元件的输出
   if(func == kNot) return not_func(operand1);
 
   for(int i = 2; i <= count; i++) {
     int operand2 = *(int*)inputs[i];
-    if (operand2 == -1) return -1;
     result = binary_func[func](result, operand2);
   }
   return result;

@@ -17,10 +17,10 @@ constexpr char kStrNot[] = "NOT";
 
 enum FUNC { kNot, kAnd, kOr , kXor, kNand, kNor };
 
-#define NUM_ELEMENT_MAX 128
-#define NUM_PORT_MAX 128
-#define NUM_RUNTIME_MAX 128
-#define NUM_QUESTION_MAX 128
+#define NUM_ELEMENT_MAX 16
+#define NUM_PORT_MAX 16
+#define NUM_RUNTIME_MAX 16
+#define NUM_QUESTION_MAX 16
 
 /**
  * @brief Sovle the given questions

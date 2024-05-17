@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        <meta charset="utf-8"/>
+	    <title>gate.h</title>
+	    <link href="../../third-party/google-code-prettify/prettify-CppCoverage.css" type="text/css" rel="stylesheet" />
+	    <script type="text/javascript" src="../../third-party/google-code-prettify/prettify.js"></script>
+	</head>
+	<body onload="prettyPrint()">
+        <h4></h4>
+		<pre class="prettyprint lang-cpp linenums">
+/**
+ * @file gate.h
+ * @brief This file contains the declarations and definitions of logic gate functions.
+ */
+#ifndef LOGIC_GATE_H_
+#define LOGIC_GATE_H_
+
+#include &lt;stdio.h&gt;
+#include &lt;stdarg.h&gt;
+#include "def.h"
+
+<span style = "background-color:#dfd">static inline int not_func(int a, int b = 0) { return !a; }
+static inline int and_func(int a, int b) { return a &amp; b; }
+static inline int or_func(int a, int b) { return a | b; }
+static inline int xor_func(int a, int b) { return a ^ b; }
+static inline int nand_func(int a, int b) { return !(a &amp; b); }
+static inline int nor_func(int a, int b) { return !(a | b); }</span>
+
+
+typedef int (*func_ptr)(int, int);
+func_ptr binary_func[] = { not_func,and_func, or_func, xor_func, nand_func, nor_func };
+
+/**
+ * @brief Performs logic gate operations based on the given function and inputs.
+ *
+ * @param func The logic gate function to be performed.
+ * @param inputs An array of inputs for the logic gate operation.
+ *               The first element represents the number of inputs.
+ *               The remaining elements represent the address of input values.
+ *
+ * @return The result of the logic gate operation.
+ *         Returns -1 if the result depends on subsequent elements' outputs.
+ */
+<span style = "background-color:#dfd">int LogicGate(int func, intptr_t* inputs) {
+  int count = inputs[0];
+  int operand1 = *(int*)inputs[1];</span>
+
+<span style = "background-color:#dfd">  int result = operand1;
+  if(func == kNot) return not_func(operand1);</span>
+
+<span style = "background-color:#dfd">  for(int i = 2; i &lt;= count; i++) {
+    int operand2 = *(int*)inputs[i];
+    result = binary_func[func](result, operand2);
+  }
+  return result;</span>
+
+<span style = "background-color:#dfd">}</span>
+
+#endif // LOGIC_GATE_H_</pre>
+	</body>
+</html>
