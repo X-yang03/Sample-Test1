@@ -11,7 +11,6 @@
 #include "def.h"
 #include "error_code.h"
 
-#define _CRT_SECURE_NO_WARNINGS
 
 TEST(SampleTest, givenCase) {
     freopen("./Test/Sample.txt", "r", stdin);
@@ -233,6 +232,7 @@ TEST(ExceptionTest, InvalidInput1) {
     char exception_str[100];
     sprintf(exception_str, "Error Code %d : %s\n", kInvalidInput, kErrorStr[kInvalidInput]);
     EXPECT_EQ(output, exception_str);
+    system("pause");
 }
 
 

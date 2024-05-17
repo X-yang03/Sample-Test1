@@ -174,32 +174,32 @@ void ReadExternalInput(int question_index) {
  * @return int Returns 0 if no loop is found, 1 otherwise.
  */
 int CheckLoop() {
-    std::deque<int> element_with_no_dependency; //store the elements with no dependency 
-    int excuted = 0;  //the number of elements that have been excuted
-    for (int i = 0; i < num_elements; i++) {
-        if (num_dependency[i] == 0) element_with_no_dependency.push_back(i);
-    }
+  std::deque<int> element_with_no_dependency; //store the elements with no dependency 
+  int excuted = 0;  //the number of elements that have been excuted
+  for (int i = 0; i < num_elements; i++) {
+    if (num_dependency[i] == 0) element_with_no_dependency.push_back(i);
+  }
 
-    while (!element_with_no_dependency.empty()) {     //process the elements with no dependency 
-        int next_excute = element_with_no_dependency.front();
-        element_with_no_dependency.pop_front();
-
-        excute_order[excuted++] = next_excute;
-
-        while (!connect_to[next_excute].empty()) {  //update the dependency count
-            int to_element = connect_to[next_excute].front();
-            connect_to[next_excute].pop_front();
-            num_dependency[to_element]--;  //decrease the dependency count
-            if (num_dependency[to_element] == 0) {  //if the dependency count is 0, add it to the queue
-                element_with_no_dependency.push_back(to_element);
-            }
-        }
+  while (!element_with_no_dependency.empty()) {     //process the elements with no dependency 
+    int next_excute = element_with_no_dependency.front();
+    element_with_no_dependency.pop_front();
+    
+    excute_order[excuted++] = next_excute;
+    
+    while (!connect_to[next_excute].empty()) {  //update the dependency count
+      int to_element = connect_to[next_excute].front();
+      connect_to[next_excute].pop_front();
+      num_dependency[to_element]--;  //decrease the dependency count
+      if (num_dependency[to_element] == 0) {  //if the dependency count is 0, add it to the queue
+          element_with_no_dependency.push_back(to_element);
+      }
     }
-    if (excuted != num_elements) {
-        printf("Loop\n");
-        return 1;
-    }
-    return 0;
+  }
+  if (excuted != num_elements) {
+    printf("Loop\n");
+    return 1;
+  }
+  return 0;
 }
 
 /**
@@ -262,5 +262,12 @@ void Solve() {
 
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);   //initialize Google Test
+  printf("Type 1 to run unit tests; type 2 to solve your problem:\n");
+  int operation = 0;
+  scanf("%d", &operation);
+  if (operation == 2) {
+    Solve();
+    return 0;
+  }
   return RUN_ALL_TESTS();
 }
