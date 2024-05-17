@@ -32,7 +32,7 @@ int func[NUM_ELEMENT_MAX] = { 0 };
 int error_code[NUM_RUNTIME_MAX] = { 0 };
 
 static inline void DetectError(int _error_code, int question_index) {
-    error_code[question_index] = _error_code;
+    if(error_code[question_index] == -1) error_code[question_index] = _error_code;
     printf("Error Code %d : %s\n", error_code,error_str[_error_code]);
 }
 
@@ -83,21 +83,30 @@ static inline int Excute(int element_index) {
  */
 void ConnectWire(int question_index) {
   scanf("%d %d", &num_input, &num_elements);  //读入 num_input num_elements
-  
+  if (num_elements > NUM_ELEMENT_MAX || num_elements < 0) DetectError(kInvalidElementNum,question_index);
+  if (num_input > NUM_ELEMENT_MAX * NUM_PORT_MAX || num_input < 0) DetectError(kInvalidInputsNum, question_index);
+
   for (int i = 0; i < num_elements; i++) { //依次读入num_elements个元件
     char element_kind[5];
     int num_port;      //元件有num_port个输入
     scanf("%s %d", element_kind, &num_port);
-    if (strcmp(element_kind, STR_AND) == 0) { func[i] = kAnd; }
-    else if (strcmp(element_kind, STR_OR) == 0) { func[i] = kOr; }
-    else if (strcmp(element_kind, STR_XOR) == 0) { func[i] = kXor; }
-    else if (strcmp(element_kind, STR_NAND) == 0) { func[i] = kNand; }
-    else if (strcmp(element_kind, STR_NOR) == 0) { func[i] = kNor; }
-    else if (strcmp(element_kind, STR_NOT) == 0) {func[i] = kNot;
-      if (num_port != 1)
-        DetectError(kNotWithWrongInput, question_index);
+    if (strcmp(element_kind, kStrAnd) == 0)
+      func[i] = kAnd; 
+    else if (strcmp(element_kind, kStrOr) == 0)
+      func[i] = kOr; 
+    else if (strcmp(element_kind, kStrXor) == 0) 
+      func[i] = kXor;
+    else if (strcmp(element_kind, kStrNand) == 0)
+      func[i] = kNand;
+    else if (strcmp(element_kind, kStrNor) == 0)
+      func[i] = kNor; 
+    else if (strcmp(element_kind, kStrNot) == 0){
+      func[i] = kNot;
+      if (num_port != 1) DetectError(kNotWithWrongInput, question_index);
     }
-    else { DetectError(kInvalidElement, question_index);}
+    else 
+      DetectError(kInvalidElement, question_index);
+    if (num_port < 0 || num_port > NUM_PORT_MAX) DetectError(kInvalidPortNum, question_index);
 
     element_inputs[i][0] = num_port;   //元件输入参数的第一位表示输入个数
   
@@ -109,18 +118,15 @@ void ConnectWire(int question_index) {
       sscanf(input, "%c%d", &from, &index);
 
       if (from == 'I') {   //来自外部元件
-        if (index > num_input || index < 0) {
-          DetectError(kInvalidInput, question_index);
-        }
+        if (index > num_input || index < 0) DetectError(kInvalidInput, question_index);
         element_inputs[i][j] = (intptr_t)&wire_inputs[index - 1];  //参数连接到外部输入
       }
       else if (from == 'O') {  //来自元件输出
-        if (index > num_elements || index < 0) {
-          DetectError(kInvalidInput, question_index);
-        }
+        if (index > num_elements || index < 0) DetectError(kInvalidInput, question_index);
         element_inputs[i][j] = (intptr_t)&element_outputs[index - 1];  //参数连接到元件输出
       }
-      else { DetectError(kInvalidInput, question_index);}
+      else 
+        DetectError(kInvalidInput, question_index);
     }
   }
 }
@@ -135,6 +141,8 @@ void ConnectWire(int question_index) {
  */
 void ReadExternalInput(int question_index) {
   scanf("%d", &num_excute);   //运行次数
+  if (num_excute > NUM_RUNTIME_MAX || num_excute < 0) DetectError(kInvalidRuntimeNum, question_index);
+ 
   for (int i = 0; i < num_excute; i++) {
     for (int j = 0; j < num_input; j++) {
       int signal = -1;
@@ -206,6 +214,10 @@ void ExcuteWire() {
  */
 void Solve() {
   scanf("%d\n", &num_question);
+  if (num_question > NUM_QUESTION_MAX || num_question < 0) {
+    DetectError(kInvalidQuesionNum, 0);
+    return;
+  }
   for (int i = 0; i < num_question; i++) {
     Reset();
     ConnectWire(i);
